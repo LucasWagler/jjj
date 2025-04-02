@@ -1,16 +1,19 @@
 //! Rendering logic for the general interface.
 
+use anyhow::Result;
 use bevy::prelude::*;
 use bevy_ratatui::terminal::RatatuiContext;
-use color_eyre::eyre::Result;
 use ratatui::prelude::*;
 
 use crate::app::AppSet;
+use crate::backend::log::LogRequestEvent;
 use crate::frontend::prelude::*;
 
 use super::Screen;
 
 pub fn plugin(app: &mut App) {
+    app.add_systems(OnEnter(Screen::Interface), get_log);
+
     app.add_systems(
         Update,
         draw.map(bevy::utils::error)
@@ -19,9 +22,14 @@ pub fn plugin(app: &mut App) {
     );
 }
 
+fn get_log(mut ev_read_log: EventWriter<LogRequestEvent>) {
+    ev_read_log.send(LogRequestEvent::from("all()"));
+}
+
 fn draw(
     mut context: ResMut<RatatuiContext>,
     change_buffer: Res<ChangeBuffer>,
+    error_popup: Res<ErrorPopup>,
     status_line: Res<StatusLine>,
 ) -> Result<()> {
     context.draw(|frame| {
@@ -34,6 +42,9 @@ fn draw(
 
         frame.render_widget(change_buffer.into_inner(), buffer_area);
         frame.render_widget(status_line.into_inner(), status_line_area);
+
+        // Render after everything else
+        frame.render_widget(error_popup.into_inner(), frame.area());
     })?;
 
     Ok(())

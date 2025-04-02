@@ -2,9 +2,9 @@
 
 use std::time::Duration;
 
+use anyhow::Result;
 use bevy::prelude::*;
 use bevy_ratatui::{event::KeyEvent, terminal::RatatuiContext};
-use color_eyre::eyre::Result;
 use crossterm::event::KeyCode;
 use ratatui::{
     layout::{Flex, Rect},
