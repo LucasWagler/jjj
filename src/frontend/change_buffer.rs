@@ -10,6 +10,7 @@ use crate::{
     app::AppSet,
     backend::{log::LogResponseEvent, revisions::Revision},
     screens::Screen,
+    tui::{container::TuiBuilderInsertContainerExt, prelude::*},
 };
 
 use super::prelude::*;
@@ -140,4 +141,15 @@ fn revision_line(revision: &Revision, is_selected: bool) -> Line {
         Span::styled(commit_id_prefix, Style::new().not_dim().light_cyan()),
         Span::styled(commit_id_postfix, Style::new().dim()),
     ])
+}
+
+#[derive(Component)]
+pub struct _ChangeBuffer;
+
+fn spawn_change_buffer(
+    mut commands: Commands,
+    change_buffer: Query<(Entity, &Children), Added<_ChangeBuffer>>,
+) {
+    (commands.tui(change_buffer.single()))
+        .insert_container(Node::column().height(Constraint::Fill(1)), |col| {});
 }

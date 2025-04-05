@@ -5,6 +5,7 @@ pub mod errors;
 pub mod events;
 pub mod frontend;
 pub mod screens;
+pub mod tui;
 pub mod utils;
 
 use bevy::prelude::*;

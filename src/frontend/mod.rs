@@ -9,6 +9,8 @@ pub mod empty_buffer;
 pub mod error_popup;
 pub mod focus;
 pub mod status_line;
+pub mod text;
+pub mod tui;
 
 pub mod prelude {
     pub use super::change_buffer::ChangeBuffer;
